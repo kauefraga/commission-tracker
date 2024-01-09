@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import type { Commission } from '@/types/Commission';
 import { createCommission } from '@/localstorage/Commission';
+import { useCommissionStore } from '@/stores/CommissionStore';
 import { reactive } from 'vue';
 
 defineProps<{
-  emitNewCommission: (commission: Commission) => void
   isVisible: boolean
   changeVisibility: () => boolean
 }>();
 
-const commission = reactive<Commission>({
+const store = useCommissionStore();
+const currentCommission = reactive<Commission>({
   id: null,
   created_at: null,
   status: 'NONE',
@@ -19,25 +20,17 @@ const commission = reactive<Commission>({
 });
 
 function clearForm() {
-  commission.id = null;
-  commission.client = '';
-  commission.clientSocialMedia = '';
-  commission.price = 0;
-  commission.created_at = null;
+  currentCommission.id = null;
+  currentCommission.client = '';
+  currentCommission.clientSocialMedia = '';
+  currentCommission.price = 0;
+  currentCommission.created_at = null;
 }
 
-function createCommissionAndHideModal(
-  emitNewCommission: (commission: Commission) => void,
-  changeModalVisibility: () => boolean
-) {
-  createCommission(commission);
-  emitNewCommission({
-    id: commission.id,
-    client: commission.client,
-    clientSocialMedia: commission.clientSocialMedia,
-    price: commission.price,
-    created_at: commission.created_at
-  } as Commission);
+function createCommissionAndHideModal(changeModalVisibility: () => boolean) {
+  store.income += currentCommission.price;
+  store.commissions.push({ ...currentCommission });
+  createCommission(currentCommission);
 
   changeModalVisibility();
   clearForm();
@@ -59,7 +52,7 @@ function createCommissionAndHideModal(
         rounded-xl border border-neutral-400 bg-neutral-800
         select-none text-xl
       "
-      v-on:submit.prevent="createCommissionAndHideModal(emitNewCommission, changeVisibility)"
+      v-on:submit.prevent="createCommissionAndHideModal(changeVisibility)"
     >
       <div class="flex justify-end mb-6">
         <button
@@ -78,20 +71,20 @@ function createCommissionAndHideModal(
         type="text"
         placeholder="Client name"
         required
-        v-model="commission.client"
+        v-model="currentCommission.client"
       />
       <input
         class="my-1 p-3 rounded-sm"
         type="text"
         placeholder="Client social media"
         required
-        v-model="commission.clientSocialMedia"
+        v-model="currentCommission.clientSocialMedia"
       />
       <input
         class="my-1 p-3 rounded-sm"
         type="number"
         placeholder="Commission price"
-        v-model.number="commission.price"
+        v-model.number="currentCommission.price"
       />
       <button
         class="

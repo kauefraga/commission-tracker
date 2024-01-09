@@ -1,24 +1,21 @@
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useCommissionStore } from '@/stores/CommissionStore';
+import { getAllCommissions } from '@/localstorage/Commission';
 import NewCommissionModal from '@/components/NewCommissionModal.vue';
 import CommissionList from '@/components/CommissionList.vue';
-import type { Commission } from '@/types/Commission';
-import { getAllCommissions } from '@/localstorage/Commission';
 
 const isNewCommissionModalVisible = ref(false);
 const changeNewCommissionModalVisibility = () => isNewCommissionModalVisible.value = !isNewCommissionModalVisible.value;
 
-const commissions = reactive<Commission[]>([]);
-const income = ref(0);
-const emitNewCommission = (commission: Commission) => {
-  income.value += commission.price;
-  commissions.push(commission);
-};
+const store = useCommissionStore();
+const { commissions, income } = storeToRefs(store);
 
 onMounted(() => {
   const { storedIncome, storedCommissions } = getAllCommissions();
 
-  commissions.push(...storedCommissions);
+  commissions.value.push(...storedCommissions);
   income.value = storedIncome
 });
 
@@ -27,15 +24,15 @@ onMounted(() => {
 <template>
   <button
     class="
-    bg-neutral-200 hover:bg-neutral-300 active:bg-neutral-400
-      text-xl rounded-lg px-12 py-4
+      text-white bg-violet-700 hover:bg-violet-800 active:bg-violet-900
+      text-xl rounded-lg px-12 py-4 shadow-lg
     "
     v-on:click="isNewCommissionModalVisible = !isNewCommissionModalVisible"
   >
     New Commission
   </button>
 
-  <CommissionList :commissions="commissions" />
+  <CommissionList />
   <p
     class="text-lg"
     id="total-price"
@@ -44,7 +41,6 @@ onMounted(() => {
   </p>
 
   <NewCommissionModal
-    :emit-new-commission="emitNewCommission"
     :is-visible="isNewCommissionModalVisible"
     :change-visibility="changeNewCommissionModalVisibility"
   />

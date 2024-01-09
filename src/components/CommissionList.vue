@@ -1,26 +1,29 @@
 <script setup lang="ts">
-import type { Commission } from '@/types/Commission';
+import { useCommissionStore } from '@/stores/CommissionStore';
+import { storeToRefs } from 'pinia';
 
-defineProps<{
-  commissions: Commission[]
-}>();
+const store = useCommissionStore();
+const { commissions } = storeToRefs(store);
+
 </script>
 
 <template>
-  <ul
-    id="commission-list"
-    class="my-6"
-  >
-    <li
-      class="
-        flex justify-between bg-neutral-200 hover:bg-neutral-300 active:bg-neutral-400
-        text-lg rounded-lg px-12 py-4 m-2
-      "
-      v-for="commission in commissions"
-      v-bind:key="commission.client"
+  <section class="my-6">
+    <p class="my-3 text-xl font-bold">Commissions</p>
+    <ul
+      id="commission-list"
     >
-      <p class="p-1">{{ commission.client }}</p>
-      <p class="p-1">Price (R$): {{ commission.price }}</p>
-    </li>
-  </ul>
+      <li
+        class="
+          flex justify-between bg-neutral-200 hover:bg-neutral-300 active:bg-neutral-400
+          items-center text-lg rounded-lg px-8 py-4 my-2
+        "
+        v-for="commission in commissions"
+        :key="commission.client"
+      >
+        <p class="mx-3 my-2">{{ commission.client }}</p>
+        <p class="mx-3 my-2">{{ commission.status }}</p>
+      </li>
+    </ul>
+  </section>
 </template>
