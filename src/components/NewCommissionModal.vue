@@ -59,7 +59,7 @@ function createCommissionAndHideModal(changeModalVisibility: () => boolean) {
           v-on:click.prevent="changeVisibility"
         >
           <img
-            src="../assets/close.svg"
+            src="../assets/close-white.svg"
             alt="Close icon"
             width="32"
             height="32"
