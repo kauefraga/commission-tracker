@@ -66,20 +66,22 @@ function createCommissionAndHideModal(changeModalVisibility: () => boolean) {
           />
         </button>
       </div>
-      <input
-        class="my-1 p-3 rounded-sm"
-        type="text"
-        placeholder="Client name"
-        required
-        v-model="currentCommission.client"
-      />
-      <input
-        class="my-1 p-3 rounded-sm"
-        type="text"
-        placeholder="Client social media"
-        required
-        v-model="currentCommission.clientSocialMedia"
-      />
+      <div class="flex space-x-1">
+        <input
+          class="my-1 p-3 rounded-sm"
+          type="text"
+          placeholder="Client name"
+          required
+          v-model="currentCommission.client"
+        />
+        <input
+          class="my-1 p-3 rounded-sm"
+          type="text"
+          placeholder="Client social media"
+          required
+          v-model="currentCommission.clientSocialMedia"
+        />
+      </div>
       <input
         class="my-1 p-3 rounded-sm "
         type="number"
@@ -88,13 +90,24 @@ function createCommissionAndHideModal(changeModalVisibility: () => boolean) {
         min="0"
         v-model.number="currentCommission.price"
       />
+      <select
+        class="my-1 p-3 rounded-sm"
+        name="status"
+        v-model="currentCommission.status"
+      >
+        <option>NONE</option>
+        <option>STARTED</option>
+        <option>ALMOST DONE</option>
+        <option>DONE</option>
+      </select>
+
       <button
         class="
           my-2 p-3 rounded-sm text-white
           bg-violet-700 hover:bg-violet-800 active:bg-violet-900
         "
       >
-        Create
+        New Commission
       </button>
     </form>
   </div>
