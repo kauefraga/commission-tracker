@@ -81,9 +81,11 @@ function createCommissionAndHideModal(changeModalVisibility: () => boolean) {
         v-model="currentCommission.clientSocialMedia"
       />
       <input
-        class="my-1 p-3 rounded-sm"
+        class="my-1 p-3 rounded-sm "
         type="number"
         placeholder="Commission price"
+        required
+        min="0"
         v-model.number="currentCommission.price"
       />
       <button
@@ -97,3 +99,16 @@ function createCommissionAndHideModal(changeModalVisibility: () => boolean) {
     </form>
   </div>
 </template>
+
+<style scoped>
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+</style>
