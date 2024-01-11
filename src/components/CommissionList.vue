@@ -13,17 +13,17 @@ const { commissions } = storeToRefs(store);
     <ul
       id="commission-list"
     >
-      <li
-        class="
-          flex justify-between bg-neutral-200 hover:bg-neutral-300 active:bg-neutral-400
-          items-center text-lg rounded-lg px-8 py-4 my-2
-        "
-        v-for="commission in commissions"
-        :key="commission.client"
-      >
-        <p class="mx-3 my-2">{{ commission.client }}</p>
-        <p class="mx-3 my-2">{{ commission.status }}</p>
-      </li>
+      <template v-for="commission in commissions" :key="commission.id">
+        <li
+          class="
+            flex justify-between bg-neutral-200 hover:bg-neutral-300 active:bg-neutral-400
+            items-center text-lg rounded-lg px-8 py-4 my-2
+          "
+        >
+          <p class="mx-3 my-2">{{ commission.client }}</p>
+          <p class="mx-3 my-2">{{ commission.status }}</p>
+        </li>
+      </template>
     </ul>
   </section>
 </template>
