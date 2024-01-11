@@ -9,7 +9,7 @@ const isNewCommissionModalVisible = ref(false);
 const changeNewCommissionModalVisibility = () => isNewCommissionModalVisible.value = !isNewCommissionModalVisible.value;
 
 const store = useCommissionStore();
-const { income } = storeToRefs(store);
+const { income, commissions } = storeToRefs(store);
 const { recoverLocalStorageCommissions } = store;
 
 onMounted(() => {
@@ -29,13 +29,22 @@ onMounted(() => {
     New Commission
   </button>
 
-  <CommissionList />
-  <p
-    class="text-lg"
-    id="total-price"
+  <template v-if="commissions.length">
+    <CommissionList />
+    <p
+      class="text-lg"
+      id="total-price"
+    >
+      Income (R$): {{ income.toFixed(2) }}
+    </p>
+  </template>
+
+  <div
+    v-if="!commissions.length"
+    class="flex flex-col items-center my-12 text-xl space-y-12"
   >
-    Income (R$): {{ income.toFixed(2) }}
-  </p>
+    <p>Get started by clicking in the button above!</p>
+  </div>
 
   <NewCommissionModal
     :is-visible="isNewCommissionModalVisible"
