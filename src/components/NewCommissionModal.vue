@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import type { Commission } from '@/types/Commission';
-import { createCommission } from '@/localstorage/Commission';
-import { useCommissionStore } from '@/stores/CommissionStore';
 import { reactive } from 'vue';
+import { useCommissionStore } from '@/stores/CommissionStore';
 
 defineProps<{
   isVisible: boolean
@@ -10,7 +9,9 @@ defineProps<{
 }>();
 
 const store = useCommissionStore();
-const currentCommission = reactive<Commission>({
+const { storeCommission } = store;
+
+let currentCommission = reactive<Commission>({
   id: null,
   created_at: null,
   status: 'NONE',
@@ -20,17 +21,18 @@ const currentCommission = reactive<Commission>({
 });
 
 function clearForm() {
-  currentCommission.id = null;
-  currentCommission.client = '';
-  currentCommission.clientSocialMedia = '';
-  currentCommission.price = 0;
-  currentCommission.created_at = null;
+  currentCommission = {
+    id: null,
+    created_at: null,
+    status: 'NONE',
+    client: '',
+    clientSocialMedia: '',
+    price: 0
+  };
 }
 
 function createCommissionAndHideModal(changeModalVisibility: () => boolean) {
-  store.income += currentCommission.price;
-  store.commissions.push({ ...currentCommission });
-  createCommission(currentCommission);
+  storeCommission(currentCommission);
 
   changeModalVisibility();
   clearForm();
