@@ -2,7 +2,6 @@
 import { ref, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useCommissionStore } from '@/stores/CommissionStore';
-import { getAllCommissions } from '@/localstorage/Commission';
 import NewCommissionModal from '@/components/NewCommissionModal.vue';
 import CommissionList from '@/components/CommissionList.vue';
 
@@ -10,13 +9,11 @@ const isNewCommissionModalVisible = ref(false);
 const changeNewCommissionModalVisibility = () => isNewCommissionModalVisible.value = !isNewCommissionModalVisible.value;
 
 const store = useCommissionStore();
-const { commissions, income } = storeToRefs(store);
+const { income } = storeToRefs(store);
+const { recoverLocalStorageCommissions } = store;
 
 onMounted(() => {
-  const { storedIncome, storedCommissions } = getAllCommissions();
-
-  commissions.value.push(...storedCommissions);
-  income.value = storedIncome
+  recoverLocalStorageCommissions();
 });
 
 </script>
