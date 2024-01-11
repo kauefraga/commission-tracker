@@ -1,5 +1,5 @@
 import type { Commission } from '@/types/Commission';
-import { createCommission } from '@/localstorage/Commission';
+import { createCommission, getAllCommissions } from '@/localstorage/Commission';
 import { defineStore } from 'pinia';
 
 export const useCommissionStore = defineStore('CommissionStore', {
@@ -8,10 +8,16 @@ export const useCommissionStore = defineStore('CommissionStore', {
     income: 0
   }),
   actions: {
-    async storeCommission(commission: Commission) {
+    storeCommission(commission: Commission) {
       createCommission(commission);
       this.commissions.push(commission);
       this.income += commission.price;
+    },
+    recoverLocalStorageCommissions() {
+      const { storedIncome, storedCommissions } = getAllCommissions();
+
+      this.commissions.push(...storedCommissions);
+      this.income = storedIncome
     }
   }
 });
