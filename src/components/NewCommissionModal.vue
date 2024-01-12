@@ -89,7 +89,8 @@ function createCommissionAndHideModal(changeModalVisibility: () => boolean) {
         type="number"
         placeholder="Commission price"
         required
-        min="0"
+        min="1"
+        step="any"
         v-model.number="currentCommission.price"
       />
       <select
@@ -97,10 +98,10 @@ function createCommissionAndHideModal(changeModalVisibility: () => boolean) {
         name="status"
         v-model="currentCommission.status"
       >
-        <option>NONE</option>
-        <option>STARTED</option>
-        <option>ALMOST DONE</option>
-        <option>DONE</option>
+        <option value="NONE">None</option>
+        <option value="STARTED">Started</option>
+        <option value="ALMOST DONE">Almost done</option>
+        <option value="DONE">Done</option>
       </select>
 
       <button
