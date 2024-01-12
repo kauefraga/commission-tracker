@@ -44,6 +44,12 @@ onMounted(() => {
     class="flex flex-col items-center my-12 text-xl space-y-12"
   >
     <p>Get started by clicking in the button above!</p>
+    <img
+      src="../assets/bubbles.png"
+      alt="Fancy Bubbles"
+      width="250"
+      height="400"
+    />
   </div>
 
   <NewCommissionModal
