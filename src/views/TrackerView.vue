@@ -31,12 +31,6 @@ onMounted(() => {
 
   <template v-if="commissions.length">
     <CommissionList />
-    <p
-      class="text-lg"
-      id="total-price"
-    >
-      Income (R$): {{ income.toFixed(2) }}
-    </p>
   </template>
 
   <div
