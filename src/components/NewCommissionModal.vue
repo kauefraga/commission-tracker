@@ -89,7 +89,8 @@ function createCommissionAndHideModal(changeModalVisibility: () => boolean) {
         type="number"
         placeholder="Commission price"
         required
-        min="0"
+        min="1"
+        step="any"
         v-model.number="currentCommission.price"
       />
       <select
