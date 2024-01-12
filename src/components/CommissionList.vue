@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useCommissionStore } from '@/stores/CommissionStore';
 import { storeToRefs } from 'pinia';
+import CommissionStatus from './CommissionStatus.vue';
 
 const store = useCommissionStore();
 const { income, commissions } = storeToRefs(store);
@@ -22,11 +23,11 @@ const { income, commissions } = storeToRefs(store);
           class="
             flex justify-between shadow bg-neutral-200 active:bg-neutral-400
             md:transition-shadow md:hover:shadow-neutral-300 md:hover:shadow-md
-            items-center text-lg rounded-lg px-8 py-4
+            text-lg rounded-lg px-8 py-4
           "
         >
-          <p>{{ commission.client }}</p>
-          <p>{{ commission.status }}</p>
+          <p class="max-w-20 md:max-w-44 whitespace-nowrap overflow-hidden text-ellipsis">{{ commission.client }}</p>
+          <CommissionStatus :commission-status="commission.status" />
         </li>
       </template>
     </ul>
