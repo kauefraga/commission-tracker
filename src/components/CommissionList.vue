@@ -26,8 +26,10 @@ const { income, commissions } = storeToRefs(store);
             text-lg rounded-lg px-8 py-4
           "
         >
-          <p class="max-w-20 md:max-w-44 whitespace-nowrap overflow-hidden text-ellipsis">{{ commission.client }}</p>
-          <CommissionStatus :commission-status="commission.status" />
+          <p class="max-w-20 md:max-w-44 whitespace-nowrap overflow-hidden text-ellipsis">{{ commission.client.name }}</p>
+          <a :href="commission.client.socialMediaUrl">Link</a>
+          <p>{{ commission.paymentStatus }}</p>
+          <CommissionStatus :art-work-status="commission.artWorkStatus" />
         </li>
       </template>
     </ul>

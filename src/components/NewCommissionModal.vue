@@ -12,21 +12,23 @@ const store = useCommissionStore();
 const { storeCommission } = store;
 
 let currentCommission = reactive<Commission>({
-  id: null,
-  created_at: null,
-  status: 'NONE',
-  client: '',
-  clientSocialMedia: '',
+  artWorkStatus: 'NOT STARTED',
+  paymentStatus: 'NOT PAID',
+  client: {
+    name: '',
+    socialMediaUrl: ''
+  },
   price: 0
 });
 
 function clearForm() {
   currentCommission = {
-    id: null,
-    created_at: null,
-    status: 'NONE',
-    client: '',
-    clientSocialMedia: '',
+    artWorkStatus: 'NOT STARTED',
+    paymentStatus: 'NOT PAID',
+    client: {
+      name: '',
+      socialMediaUrl: ''
+    },
     price: 0
   };
 }
@@ -74,16 +76,22 @@ function createCommissionAndHideModal(changeModalVisibility: () => boolean) {
           type="text"
           placeholder="Client name"
           required
-          v-model="currentCommission.client"
+          v-model="currentCommission.client.name"
         />
         <input
           class="my-1 p-3 rounded-sm"
           type="text"
           placeholder="Client social media"
           required
-          v-model="currentCommission.clientSocialMedia"
+          v-model="currentCommission.client.socialMediaUrl"
         />
       </div>
+      <input
+        class="my-1 p-3 rounded-sm"
+        type="text"
+        placeholder="Commission description"
+        v-model="currentCommission.description"
+      />
       <input
         class="my-1 p-3 rounded-sm "
         type="number"
@@ -95,13 +103,22 @@ function createCommissionAndHideModal(changeModalVisibility: () => boolean) {
       />
       <select
         class="my-1 p-3 rounded-sm"
-        name="status"
-        v-model="currentCommission.status"
+        name="artwork-status"
+        v-model="currentCommission.artWorkStatus"
       >
-        <option value="NONE">None</option>
+        <option value="NOT STARTED">Not started</option>
         <option value="STARTED">Started</option>
         <option value="ALMOST DONE">Almost done</option>
         <option value="DONE">Done</option>
+      </select>
+      <select
+        class="my-1 p-3 rounded-sm"
+        name="payment-status"
+        v-model="currentCommission.paymentStatus"
+      >
+        <option value="NOT PAID">Not paid</option>
+        <option value="HALF PAID">Half paid</option>
+        <option value="PAID">Paid</option>
       </select>
 
       <button
