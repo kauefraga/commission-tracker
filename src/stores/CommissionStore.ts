@@ -13,7 +13,7 @@ export const useCommissionStore = defineStore('CommissionStore', {
       this.commissions.push(commission);
       this.income += commission.price;
     },
-    recoverLocalStorageCommissions() {
+    recoverCommissions() {
       const { storedIncome, storedCommissions } = getAllCommissions();
 
       this.commissions.push(...storedCommissions);

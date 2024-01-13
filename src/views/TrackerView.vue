@@ -10,10 +10,10 @@ const changeNewCommissionModalVisibility = () => isNewCommissionModalVisible.val
 
 const store = useCommissionStore();
 const { commissions } = storeToRefs(store);
-const { recoverLocalStorageCommissions } = store;
+const { recoverCommissions } = store;
 
 onMounted(() => {
-  recoverLocalStorageCommissions();
+  recoverCommissions();
 });
 
 </script>

@@ -13,10 +13,6 @@ export function createCommission(commission: Commission) {
   localStorage.setItem(commission.id, JSON.stringify(commission));
 }
 
-export function removeCommissionById(commissionId: string) {
-  localStorage.removeItem(commissionId);
-}
-
 export function getAllCommissions() {
   const storedCommissions: Commission[] = [];
   let storedIncome = 0;
