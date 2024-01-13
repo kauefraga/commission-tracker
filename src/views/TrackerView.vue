@@ -2,8 +2,8 @@
 import { ref, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useCommissionStore } from '@/stores/CommissionStore';
-import NewCommissionModal from '@/components/NewCommissionModal.vue';
-import CommissionList from '@/components/CommissionList.vue';
+import NewCommissionModal from '@/components/Commission/NewCommissionModal.vue';
+import CommissionList from '@/components/Commission/List.vue';
 
 const isNewCommissionModalVisible = ref(false);
 const changeNewCommissionModalVisibility = () => isNewCommissionModalVisible.value = !isNewCommissionModalVisible.value;
