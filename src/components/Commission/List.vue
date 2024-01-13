@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useCommissionStore } from '@/stores/CommissionStore';
 import { storeToRefs } from 'pinia';
-import CommissionStatus from './CommissionStatus.vue';
+import CommissionStatus from '@/components/Commission/Status.vue';
 
 const store = useCommissionStore();
 const { income, commissions } = storeToRefs(store);
