@@ -1,5 +1,9 @@
 import type { Commission } from '@/types/Commission';
-import { createCommission, getAllCommissions } from '@/localstorage/Commission';
+import {
+  createCommission,
+  getAllCommissions,
+  updateCommission as UpdateCommissionInLocalStorage
+} from '@/localstorage/Commission';
 import { defineStore } from 'pinia';
 
 export const useCommissionStore = defineStore('CommissionStore', {
@@ -12,6 +16,25 @@ export const useCommissionStore = defineStore('CommissionStore', {
       createCommission(commission);
       this.commissions.push(commission);
       this.income += commission.price;
+    },
+    findCommissionById(commissionId: string) {
+      const commission = this.commissions.find(c => c.id === commissionId);
+
+      if (!commission) throw new Error('Commission does not exist in commission store.');
+
+      return commission;
+    },
+    updateCommission(commission: Commission) {
+      UpdateCommissionInLocalStorage(commission);
+
+      const index = this.commissions.findIndex(c => c.id === commission.id);
+
+      if (index === -1) throw new Error('Commission not found in commission store.');
+
+      this.income += commission.price - this.commissions[index].price;
+      this.commissions[index] = {
+        ...commission
+      };
     },
     recoverCommissions() {
       const { storedIncome, storedCommissions } = getAllCommissions();
