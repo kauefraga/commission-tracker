@@ -81,9 +81,11 @@ function createCommissionAndHideModal() {
         />
         <input
           class="my-1 p-3 rounded-sm"
-          type="text"
+          type="url"
           placeholder="Client social media"
           required
+          pattern="[Hh][Tt][Tt][Pp][Ss]?:\/\/(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::\d{2,5})?(?:\/[^\s]*)?"
+          title="Must contain a valid and secure url (https)."
           v-model="currentCommission.client.socialMediaUrl"
         />
       </div>
