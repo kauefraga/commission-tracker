@@ -37,7 +37,7 @@ onMounted(() => {
   >
     <p>Get started by clicking in the button above!</p>
     <img
-      src="../assets/bubbles.png"
+      src="@/assets/bubbles.png"
       alt="Fancy Bubbles"
       width="250"
       height="400"
