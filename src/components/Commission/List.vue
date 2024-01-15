@@ -1,10 +1,25 @@
 <script setup lang="ts">
-import { useCommissionStore } from '@/stores/CommissionStore';
+import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
+import { useTrackerViewStore } from '@/stores/TrackerViewStore';
+import { useCommissionStore } from '@/stores/CommissionStore';
 import CommissionStatus from '@/components/Commission/Status.vue';
+import CommissionModal from '@/components/Commission/Modals/Commission.vue';
 
-const store = useCommissionStore();
-const { income, commissions } = storeToRefs(store);
+const trackerViewStore = useTrackerViewStore();
+const { changeCommissionModalVisibility } = trackerViewStore;
+
+const commissionStore = useCommissionStore();
+const { income, commissions } = storeToRefs(commissionStore);
+
+
+let commissionId = ref('');
+function openCommissionModal(id?: string) {
+  if (!id) return;
+
+  commissionId.value = id;
+  changeCommissionModalVisibility();
+}
 
 </script>
 
@@ -25,6 +40,7 @@ const { income, commissions } = storeToRefs(store);
             md:transition-shadow md:hover:shadow-neutral-300 md:hover:shadow-md
             text-lg rounded-lg px-8 py-4
           "
+          v-on:click="openCommissionModal(commission.id)"
         >
           <p class="max-w-20 md:max-w-44 whitespace-nowrap overflow-hidden text-ellipsis">{{ commission.client.name }}</p>
           <a :href="commission.client.socialMediaUrl">Link</a>
@@ -34,4 +50,6 @@ const { income, commissions } = storeToRefs(store);
       </template>
     </ul>
   </section>
+
+  <CommissionModal v-if="commissionId" :commission-id="commissionId" />
 </template>
