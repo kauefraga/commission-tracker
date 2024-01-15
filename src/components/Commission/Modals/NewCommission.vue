@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import type { Commission } from '@/types/Commission';
-import { reactive, toRefs } from 'vue';
+import { reactive } from 'vue';
+import { useTrackerViewStore } from '@/stores/TrackerViewStore';
 import { useCommissionStore } from '@/stores/CommissionStore';
+import { storeToRefs } from 'pinia';
 
-const props = defineProps<{
-  isVisible: boolean
-  changeVisibility: () => boolean
-}>();
-const { isVisible, changeVisibility } = toRefs(props);
+const trackerViewStore = useTrackerViewStore();
+const { isNewCommissionModalVisible } = storeToRefs(trackerViewStore);
+const { changeNewCommissionModalVisibility } = trackerViewStore;
 
 const store = useCommissionStore();
 const { storeCommission } = store;
@@ -37,7 +37,7 @@ function clearForm() {
 function createCommissionAndHideModal() {
   storeCommission(currentCommission);
 
-  changeVisibility.value();
+  changeNewCommissionModalVisibility();
   clearForm();
 }
 
@@ -49,7 +49,7 @@ function createCommissionAndHideModal() {
       flex justify-center items-center fixed w-full h-full left-0 top-0
       bg-opacity-80 bg-neutral-800
     "
-    v-if="isVisible"
+    v-if="isNewCommissionModalVisible"
   >
     <form
       class="
@@ -61,10 +61,10 @@ function createCommissionAndHideModal() {
     >
       <div class="flex justify-end mb-6">
         <button
-          v-on:click.prevent="changeVisibility"
+          v-on:click.prevent="changeNewCommissionModalVisibility"
         >
           <img
-            src="../../assets/close-white.svg"
+            src="../../../assets/close-white.svg"
             alt="Close icon"
             width="32"
             height="32"
