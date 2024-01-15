@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import type { Commission } from '@/types/Commission';
-import { reactive } from 'vue';
+import { reactive, toRefs } from 'vue';
 import { useCommissionStore } from '@/stores/CommissionStore';
 
-defineProps<{
+const props = defineProps<{
   isVisible: boolean
   changeVisibility: () => boolean
 }>();
+const { isVisible, changeVisibility } = toRefs(props);
 
 const store = useCommissionStore();
 const { storeCommission } = store;
@@ -33,10 +34,10 @@ function clearForm() {
   };
 }
 
-function createCommissionAndHideModal(changeModalVisibility: () => boolean) {
+function createCommissionAndHideModal() {
   storeCommission(currentCommission);
 
-  changeModalVisibility();
+  changeVisibility.value();
   clearForm();
 }
 
@@ -56,7 +57,7 @@ function createCommissionAndHideModal(changeModalVisibility: () => boolean) {
         rounded-xl border border-neutral-400 bg-neutral-800
         select-none text-xl
       "
-      v-on:submit.prevent="createCommissionAndHideModal(changeVisibility)"
+      v-on:submit.prevent="createCommissionAndHideModal"
     >
       <div class="flex justify-end mb-6">
         <button
