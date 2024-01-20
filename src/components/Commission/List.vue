@@ -32,7 +32,7 @@ function openCommissionModal(id?: string) {
         Income (R$): <span class="select-text">{{ income.toFixed(2) }}</span>
       </p>
     </header>
-    <ul class="space-y-3">
+    <ul class="space-y-4">
       <template v-for="commission in commissions" :key="commission.id">
         <li
           class="
@@ -42,8 +42,12 @@ function openCommissionModal(id?: string) {
           "
           v-on:click="openCommissionModal(commission.id)"
         >
-          <p class="max-w-20 md:max-w-44 whitespace-nowrap overflow-hidden text-ellipsis">{{ commission.client.name }}</p>
-          <a :href="commission.client.socialMediaUrl">Link</a>
+          <a
+            class="max-w-20 md:max-w-44 whitespace-nowrap overflow-hidden text-ellipsis"
+            :href="commission.client.socialMediaUrl"
+          >
+            {{ commission.client.name }}
+          </a>
           <p>{{ commission.paymentStatus }}</p>
           <CommissionStatus :art-work-status="commission.artWorkStatus" />
         </li>
