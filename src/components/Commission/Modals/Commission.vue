@@ -94,6 +94,7 @@ onBeforeUpdate(() => {
         placeholder="Commission price"
         required
         min="1"
+        max="9999999"
         step="any"
         v-model.number="currentCommission.price"
       />
