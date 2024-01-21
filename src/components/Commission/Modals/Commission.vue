@@ -15,11 +15,20 @@ const { isCommissionModalVisible } = storeToRefs(trackerViewStore);
 const { changeCommissionModalVisibility } = trackerViewStore;
 
 const commissionStore = useCommissionStore();
-const { findCommissionById, updateCommission } = commissionStore;
+const {
+  findCommissionById,
+  updateCommission,
+  deleteCommissionById,
+} = commissionStore;
 
 let currentCommission = reactive<Commission>(
   findCommissionById(commissionId.value)
 );
+
+function deleteCommission() {
+  deleteCommissionById(commissionId.value);
+  changeCommissionModalVisibility();
+}
 
 function updateCommissionAndHideModal() {
   updateCommission(currentCommission);
@@ -118,14 +127,27 @@ onBeforeUpdate(() => {
         <option value="PAID">Paid</option>
       </select>
 
-      <button
-        class="
-          my-2 p-3 rounded-sm text-white
-          bg-violet-700 hover:bg-violet-800 active:bg-violet-900
-        "
-      >
-        Update Commission
-      </button>
+      <div class="flex items-center justify-between my-2">
+        <button
+          class="
+            p-3 rounded-sm text-white
+            bg-violet-700 hover:bg-violet-800 active:bg-violet-900
+          "
+        >
+          Update Commission
+        </button>
+
+        <button
+          v-on:click.prevent="deleteCommission"
+        >
+          <img
+            src="@/assets/trash-red.svg"
+            alt="Delete icon"
+            width="32"
+            height="32"
+          />
+        </button>
+      </div>
     </form>
   </div>
 </template>
