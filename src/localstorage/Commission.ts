@@ -21,6 +21,12 @@ export function updateCommission(commission: Commission) {
   localStorage.setItem(commission.id, JSON.stringify(commission));
 }
 
+export function removeCommissionById(commissionId: string) {
+  if (!validate(commissionId)) throw new Error('Invalid commission id.');
+
+  localStorage.removeItem(commissionId);
+}
+
 export function getCommissionById(commissionId: string) {
   if (!validate(commissionId)) throw new Error('Invalid commission id.');
 
