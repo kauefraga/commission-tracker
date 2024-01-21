@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
+import { useTrackerViewStore } from '@/stores/TrackerViewStore';
 import { useCommissionStore } from '@/stores/CommissionStore';
-import NewCommissionModal from '@/components/NewCommissionModal.vue';
-import CommissionList from '@/components/CommissionList.vue';
+import NewCommissionModal from '@/components/Commission/Modals/NewCommission.vue';
+import CommissionList from '@/components/Commission/List.vue';
 
-const isNewCommissionModalVisible = ref(false);
-const changeNewCommissionModalVisibility = () => isNewCommissionModalVisible.value = !isNewCommissionModalVisible.value;
+const trackerViewStore = useTrackerViewStore();
+const { changeNewCommissionModalVisibility } = trackerViewStore;
 
-const store = useCommissionStore();
-const { commissions } = storeToRefs(store);
-const { recoverCommissions } = store;
+const commissionStore = useCommissionStore();
+const { commissions } = storeToRefs(commissionStore);
+const { recoverCommissions } = commissionStore;
 
 onMounted(() => {
   recoverCommissions();
@@ -24,7 +25,7 @@ onMounted(() => {
       text-white bg-violet-700 hover:bg-violet-800 active:bg-violet-900
       text-xl rounded-lg px-12 py-4 shadow-lg
     "
-    v-on:click="isNewCommissionModalVisible = !isNewCommissionModalVisible"
+    v-on:click="changeNewCommissionModalVisibility"
   >
     New Commission
   </button>
@@ -36,15 +37,12 @@ onMounted(() => {
   >
     <p>Get started by clicking in the button above!</p>
     <img
-      src="../assets/bubbles.png"
+      src="@/assets/bubbles.png"
       alt="Fancy Bubbles"
       width="250"
       height="400"
     />
   </div>
 
-  <NewCommissionModal
-    :is-visible="isNewCommissionModalVisible"
-    :change-visibility="changeNewCommissionModalVisibility"
-  />
+  <NewCommissionModal />
 </template>

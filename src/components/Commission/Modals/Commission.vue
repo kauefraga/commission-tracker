@@ -1,44 +1,34 @@
 <script setup lang="ts">
 import type { Commission } from '@/types/Commission';
-import { reactive } from 'vue';
+import { reactive, toRefs, onBeforeUpdate } from 'vue';
+import { useTrackerViewStore } from '@/stores/TrackerViewStore';
 import { useCommissionStore } from '@/stores/CommissionStore';
+import { storeToRefs } from 'pinia';
 
-defineProps<{
-  isVisible: boolean
-  changeVisibility: () => boolean
+const props = defineProps<{
+  commissionId: string
 }>();
+const { commissionId } = toRefs(props);
 
-const store = useCommissionStore();
-const { storeCommission } = store;
+const trackerViewStore = useTrackerViewStore();
+const { isCommissionModalVisible } = storeToRefs(trackerViewStore);
+const { changeCommissionModalVisibility } = trackerViewStore;
 
-let currentCommission = reactive<Commission>({
-  artWorkStatus: 'NOT STARTED',
-  paymentStatus: 'NOT PAID',
-  client: {
-    name: '',
-    socialMediaUrl: ''
-  },
-  price: 0
+const commissionStore = useCommissionStore();
+const { findCommissionById, updateCommission } = commissionStore;
+
+let currentCommission = reactive<Commission>(
+  findCommissionById(commissionId.value)
+);
+
+function updateCommissionAndHideModal() {
+  updateCommission(currentCommission);
+  changeCommissionModalVisibility();
+}
+
+onBeforeUpdate(() => {
+  currentCommission = findCommissionById(commissionId.value);
 });
-
-function clearForm() {
-  currentCommission = {
-    artWorkStatus: 'NOT STARTED',
-    paymentStatus: 'NOT PAID',
-    client: {
-      name: '',
-      socialMediaUrl: ''
-    },
-    price: 0
-  };
-}
-
-function createCommissionAndHideModal(changeModalVisibility: () => boolean) {
-  storeCommission(currentCommission);
-
-  changeModalVisibility();
-  clearForm();
-}
 
 </script>
 
@@ -48,7 +38,7 @@ function createCommissionAndHideModal(changeModalVisibility: () => boolean) {
       flex justify-center items-center fixed w-full h-full left-0 top-0
       bg-opacity-80 bg-neutral-800
     "
-    v-if="isVisible"
+    v-if="isCommissionModalVisible"
   >
     <form
       class="
@@ -56,14 +46,14 @@ function createCommissionAndHideModal(changeModalVisibility: () => boolean) {
         rounded-xl border border-neutral-400 bg-neutral-800
         select-none text-xl
       "
-      v-on:submit.prevent="createCommissionAndHideModal(changeVisibility)"
+      v-on:submit.prevent="updateCommissionAndHideModal"
     >
       <div class="flex justify-end mb-6">
         <button
-          v-on:click.prevent="changeVisibility"
+          v-on:click.prevent="changeCommissionModalVisibility"
         >
           <img
-            src="../assets/close-white.svg"
+            src="@/assets/close-white.svg"
             alt="Close icon"
             width="32"
             height="32"
@@ -74,27 +64,33 @@ function createCommissionAndHideModal(changeModalVisibility: () => boolean) {
         <input
           class="my-1 p-3 rounded-sm"
           type="text"
+          name="client-name"
           placeholder="Client name"
           required
           v-model="currentCommission.client.name"
         />
         <input
           class="my-1 p-3 rounded-sm"
-          type="text"
+          type="url"
+          name="client-social-media"
           placeholder="Client social media"
           required
+          pattern="[Hh][Tt][Tt][Pp][Ss]?:\/\/(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::\d{2,5})?(?:\/[^\s]*)?"
+          title="Must contain a valid and secure url (https)."
           v-model="currentCommission.client.socialMediaUrl"
         />
       </div>
       <input
         class="my-1 p-3 rounded-sm"
         type="text"
+        name="commission-description"
         placeholder="Commission description"
         v-model="currentCommission.description"
       />
       <input
         class="my-1 p-3 rounded-sm "
         type="number"
+        name="commission-price"
         placeholder="Commission price"
         required
         min="1"
@@ -127,7 +123,7 @@ function createCommissionAndHideModal(changeModalVisibility: () => boolean) {
           bg-violet-700 hover:bg-violet-800 active:bg-violet-900
         "
       >
-        New Commission
+        Update Commission
       </button>
     </form>
   </div>

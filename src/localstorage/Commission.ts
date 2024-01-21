@@ -13,6 +13,24 @@ export function createCommission(commission: Commission) {
   localStorage.setItem(commission.id, JSON.stringify(commission));
 }
 
+export function updateCommission(commission: Commission) {
+  if (!commission.id) throw new Error('Commission id does not exist.');
+
+  if (!validate(commission.id)) throw new Error('Invalid commission id.');
+
+  localStorage.setItem(commission.id, JSON.stringify(commission));
+}
+
+export function getCommissionById(commissionId: string) {
+  if (!validate(commissionId)) throw new Error('Invalid commission id.');
+
+  const json = localStorage.getItem(commissionId);
+
+  if (!json) throw new Error('Commission does not exist.');
+
+  return JSON.parse(json) as Commission;
+}
+
 export function getAllCommissions() {
   const storedCommissions: Commission[] = [];
   let storedIncome = 0;

@@ -6,7 +6,7 @@ import Container from './components/Container.vue';
 <template>
   <header class="m-8">
     <img
-      src="./assets/logo.svg"
+      src="@/assets/logo.svg"
       alt="Commission Tracker's logo"
       width="60"
       height="60"
