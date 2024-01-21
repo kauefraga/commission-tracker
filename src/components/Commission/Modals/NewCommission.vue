@@ -75,6 +75,7 @@ function createCommissionAndHideModal() {
         <input
           class="my-1 p-3 rounded-sm"
           type="text"
+          name="client-name"
           placeholder="Client name"
           required
           v-model="currentCommission.client.name"
@@ -82,6 +83,7 @@ function createCommissionAndHideModal() {
         <input
           class="my-1 p-3 rounded-sm"
           type="url"
+          name="client-social-media"
           placeholder="Client social media"
           required
           pattern="[Hh][Tt][Tt][Pp][Ss]?:\/\/(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::\d{2,5})?(?:\/[^\s]*)?"
@@ -92,12 +94,14 @@ function createCommissionAndHideModal() {
       <input
         class="my-1 p-3 rounded-sm"
         type="text"
+        name="commission-description"
         placeholder="Commission description"
         v-model="currentCommission.description"
       />
       <input
         class="my-1 p-3 rounded-sm "
         type="number"
+        name="commission-price"
         placeholder="Commission price"
         required
         min="1"
