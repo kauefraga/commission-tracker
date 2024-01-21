@@ -42,15 +42,30 @@ function openCommissionModal(id?: string) {
           "
           v-on:click="openCommissionModal(commission.id)"
         >
-          <a
-            class="max-w-20 md:max-w-44 whitespace-nowrap overflow-hidden text-ellipsis"
-            :href="commission.client.socialMediaUrl"
-            target="_blank"
+          <div
+            class="flex items-center space-x-2"
           >
-            {{ commission.client.name }}
-          </a>
-          <p>{{ commission.paymentStatus }}</p>
-          <CommissionStatus :art-work-status="commission.artWorkStatus" />
+            <a
+              :href="commission.client.socialMediaUrl"
+              target="_blank"
+            >
+              <img
+                src="@/assets/letter.svg"
+                alt="Letter icon. It redirects you to the client social media."
+                width="24"
+                height="24"
+              />
+            </a>
+            <p
+              class="max-w-20 md:max-w-44 whitespace-nowrap overflow-hidden text-ellipsis"
+            >
+              {{ commission.client.name }}
+            </p>
+          </div>
+          <div class="flex items-center space-x-4">
+            <p>{{ commission.paymentStatus }}</p>
+            <CommissionStatus :art-work-status="commission.artWorkStatus" />
+          </div>
         </li>
       </template>
     </ul>
