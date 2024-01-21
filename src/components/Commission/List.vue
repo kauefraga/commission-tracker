@@ -45,6 +45,7 @@ function openCommissionModal(id?: string) {
           <a
             class="max-w-20 md:max-w-44 whitespace-nowrap overflow-hidden text-ellipsis"
             :href="commission.client.socialMediaUrl"
+            target="_blank"
           >
             {{ commission.client.name }}
           </a>
