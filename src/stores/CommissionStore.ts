@@ -2,6 +2,7 @@ import type { Commission } from '@/types/Commission';
 import {
   createCommission,
   getAllCommissions,
+  removeCommissionById,
   updateCommission as UpdateCommissionInLocalStorage
 } from '@/localstorage/Commission';
 import { defineStore } from 'pinia';
@@ -45,6 +46,15 @@ export const useCommissionStore = defineStore('CommissionStore', {
         ...commission
       };
       this.income += commission.price;
+    },
+    deleteCommissionById(commissionId: string) {
+      removeCommissionById(commissionId);
+
+      const index = this.commissions.findIndex(c => c.id === commissionId);
+
+      if (index === -1) throw new Error('Commission not found in commission store.');
+
+      this.commissions.splice(index, 1);
     },
     recoverCommissions() {
       const { storedIncome, storedCommissions } = getAllCommissions();
