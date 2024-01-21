@@ -22,7 +22,16 @@ export const useCommissionStore = defineStore('CommissionStore', {
 
       if (!commission) throw new Error('Commission does not exist in commission store.');
 
-      return commission;
+      /*
+        Return value, not store reference :)
+        If you change this to a straightforward return (`return commission;`),
+        then CommissionModal (on submit) will change store's commission directly
+        and `updateCommission` action won't be able to calculate the
+        updated income properly.
+
+        Sorry for the workaround.
+      */
+      return { ...commission };
     },
     updateCommission(commission: Commission) {
       UpdateCommissionInLocalStorage(commission);
@@ -31,10 +40,11 @@ export const useCommissionStore = defineStore('CommissionStore', {
 
       if (index === -1) throw new Error('Commission not found in commission store.');
 
-      this.income += commission.price - this.commissions[index].price;
+      this.income -= this.commissions[index].price;
       this.commissions[index] = {
         ...commission
       };
+      this.income += commission.price;
     },
     recoverCommissions() {
       const { storedIncome, storedCommissions } = getAllCommissions();
