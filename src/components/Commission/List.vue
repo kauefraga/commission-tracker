@@ -1,25 +1,14 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useTrackerViewStore } from '@/stores/TrackerViewStore';
 import { useCommissionStore } from '@/stores/CommissionStore';
 import CommissionStatus from '@/components/Commission/Status.vue';
-import CommissionModal from '@/components/Commission/Modals/Commission.vue';
 
 const trackerViewStore = useTrackerViewStore();
-const { changeCommissionModalVisibility } = trackerViewStore;
+const { openModal } = trackerViewStore;
 
 const commissionStore = useCommissionStore();
 const { income, commissions } = storeToRefs(commissionStore);
-
-
-let commissionId = ref('');
-function openCommissionModal(id?: string) {
-  if (!id) return;
-
-  commissionId.value = id;
-  changeCommissionModalVisibility();
-}
 
 </script>
 
@@ -40,7 +29,7 @@ function openCommissionModal(id?: string) {
             md:transition-shadow md:hover:shadow-neutral-300 md:hover:shadow-md
             text-lg rounded-lg px-8 py-4
           "
-          v-on:click="openCommissionModal(commission.id)"
+          v-on:click="openModal(commission.id)"
         >
           <div
             class="flex items-center space-x-2"
@@ -70,6 +59,4 @@ function openCommissionModal(id?: string) {
       </template>
     </ul>
   </section>
-
-  <CommissionModal v-if="commissionId" :commission-id="commissionId" />
 </template>
