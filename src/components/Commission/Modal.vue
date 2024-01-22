@@ -1,42 +1,72 @@
 <script setup lang="ts">
 import type { Commission } from '@/types/Commission';
-import { reactive, toRefs, onBeforeUpdate } from 'vue';
 import { useTrackerViewStore } from '@/stores/TrackerViewStore';
-import { useCommissionStore } from '@/stores/CommissionStore';
 import { storeToRefs } from 'pinia';
-
-const props = defineProps<{
-  commissionId: string
-}>();
-const { commissionId } = toRefs(props);
+import { onBeforeUpdate, reactive } from 'vue';
+import { useCommissionStore } from '@/stores/CommissionStore';
 
 const trackerViewStore = useTrackerViewStore();
-const { isCommissionModalVisible } = storeToRefs(trackerViewStore);
-const { changeCommissionModalVisibility } = trackerViewStore;
+const {
+  isModalVisible,
+  currentModal,
+  currentCommissionId
+} = storeToRefs(trackerViewStore);
+const { closeModal } = trackerViewStore;
 
 const commissionStore = useCommissionStore();
 const {
-  findCommissionById,
+  storeCommission,
   updateCommission,
   deleteCommissionById,
+  findCommissionById
 } = commissionStore;
 
-let currentCommission = reactive<Commission>(
-  findCommissionById(commissionId.value)
-);
+let currentCommission = reactive<Commission>({
+  artWorkStatus: 'NOT STARTED',
+  paymentStatus: 'NOT PAID',
+  client: {
+    name: '',
+    socialMediaUrl: ''
+  },
+  price: 0
+});
 
-function deleteCommission() {
-  deleteCommissionById(commissionId.value);
-  changeCommissionModalVisibility();
+function submitHandler() {
+  if (currentModal.value === 'CREATE') {
+    storeCommission(currentCommission);
+    closeModal();
+  }
+
+  if (currentModal.value === 'UPDATE') {
+    updateCommission(currentCommission);
+    closeModal();
+  }
 }
 
-function updateCommissionAndHideModal() {
-  updateCommission(currentCommission);
-  changeCommissionModalVisibility();
+function deleteCommission() {
+  deleteCommissionById(currentCommissionId.value);
+  closeModal();
 }
 
 onBeforeUpdate(() => {
-  currentCommission = findCommissionById(commissionId.value);
+  if (currentModal.value === 'CREATE') {
+    // Clear form
+    currentCommission = {
+      artWorkStatus: 'NOT STARTED',
+      paymentStatus: 'NOT PAID',
+      client: {
+        name: '',
+        socialMediaUrl: ''
+      },
+      price: 0
+    };
+  }
+
+  if (currentModal.value !== 'CREATE') {
+    if (!currentCommission.id || currentCommission.id !== currentCommissionId.value) {
+      currentCommission = findCommissionById(currentCommissionId.value);
+    }
+  }
 });
 
 </script>
@@ -47,7 +77,7 @@ onBeforeUpdate(() => {
       flex justify-center items-center fixed w-full h-full left-0 top-0
       bg-opacity-80 bg-neutral-800
     "
-    v-if="isCommissionModalVisible"
+    v-if="isModalVisible"
   >
     <form
       class="
@@ -55,11 +85,12 @@ onBeforeUpdate(() => {
         rounded-xl border border-neutral-400 bg-neutral-800
         select-none text-xl
       "
-      v-on:submit.prevent="updateCommissionAndHideModal"
+      v-on:submit.prevent="submitHandler"
     >
       <div class="flex justify-end mb-6">
         <button
-          v-on:click.prevent="changeCommissionModalVisibility"
+          type="button"
+          v-on:click.prevent="closeModal"
         >
           <img
             src="@/assets/close-white.svg"
@@ -127,7 +158,20 @@ onBeforeUpdate(() => {
         <option value="PAID">Paid</option>
       </select>
 
-      <div class="flex items-center justify-between my-2">
+      <button
+        v-if="currentModal === 'CREATE'"
+        class="
+          my-2 p-3 rounded-sm text-white
+          bg-violet-700 hover:bg-violet-800 active:bg-violet-900
+        "
+      >
+        New Commission
+      </button>
+
+      <div
+        v-if="currentModal !== 'CREATE'"
+        class="flex items-center justify-between my-2"
+      >
         <button
           class="
             p-3 rounded-sm text-white
@@ -138,6 +182,7 @@ onBeforeUpdate(() => {
         </button>
 
         <button
+          type="button"
           v-on:click.prevent="deleteCommission"
         >
           <img
