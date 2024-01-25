@@ -8,7 +8,8 @@ const trackerViewStore = useTrackerViewStore();
 const { openModal } = trackerViewStore;
 
 const commissionStore = useCommissionStore();
-const { income, commissions } = storeToRefs(commissionStore);
+const { income } = storeToRefs(commissionStore);
+const { sortedCommissions } = commissionStore;
 
 </script>
 
@@ -22,7 +23,7 @@ const { income, commissions } = storeToRefs(commissionStore);
       </p>
     </header>
     <ul class="space-y-4">
-      <template v-for="commission in commissions" :key="commission.id">
+      <template v-for="commission in sortedCommissions" :key="commission.id">
         <li
           class="
             flex justify-between shadow bg-neutral-200 active:bg-neutral-400

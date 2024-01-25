@@ -12,6 +12,20 @@ export const useCommissionStore = defineStore('CommissionStore', {
     commissions: [] as Commission[],
     income: 0
   }),
+  getters: {
+    sortedCommissions: (state) => {
+      return state.commissions.sort((a, b) => {
+        if (!a.created_at) return 0;
+        if (!b.created_at) return 0;
+
+        if (a.created_at > b.created_at) {
+          return 1;
+        }
+
+        return -1;
+      });
+    },
+  },
   actions: {
     storeCommission(commission: Commission) {
       createCommission(commission);
