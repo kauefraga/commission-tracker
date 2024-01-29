@@ -8,10 +8,10 @@ const props = defineProps<{
 const { artWorkStatus } = toRefs(props);
 
 const statusColor = {
-  'NOT STARTED': 'bg-violet-900',
-  'STARTED': 'bg-pink-500',
-  'ALMOST DONE': 'bg-yellow-600',
-  'DONE': 'bg-lime-600'
+  'NOT STARTED': 'bg-zinc-400',
+  'STARTED': 'bg-yellow-600',
+  'ALMOST DONE': 'bg-lime-600',
+  'DONE': 'bg-green-800'
 };
 
 </script>
