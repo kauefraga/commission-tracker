@@ -1,11 +1,12 @@
 import type { Commission } from '@/types/Commission';
 import {
-  createCommission,
+  storeCommission,
   getAllCommissions,
   removeCommissionById,
   updateCommission as UpdateCommissionInLocalStorage
-} from '@/localstorage/Commission';
+} from '@/database/LocalStorage';
 import { defineStore } from 'pinia';
+import { v4, validate } from 'uuid';
 
 export const useCommissionStore = defineStore('CommissionStore', {
   state: () => ({
@@ -27,12 +28,23 @@ export const useCommissionStore = defineStore('CommissionStore', {
     },
   },
   actions: {
-    storeCommission(commission: Commission) {
-      createCommission(commission);
+    createCommission(commission: Commission) {
+      if (!commission.id) {
+        commission.id = v4();
+      }
+
+      if (!commission.created_at) {
+        commission.created_at = new Date();
+      }
+
       this.commissions.push(commission);
       this.income += commission.price;
+
+      storeCommission(commission)
     },
     findCommissionById(commissionId: string) {
+      if (validate(commissionId)) throw new Error('Commission id is invalid.');
+
       const commission = this.commissions.find(c => c.id === commissionId);
 
       if (!commission) throw new Error('Commission does not exist in commission store.');
@@ -49,26 +61,29 @@ export const useCommissionStore = defineStore('CommissionStore', {
       return { ...commission };
     },
     updateCommission(commission: Commission) {
-      UpdateCommissionInLocalStorage(commission);
+      if (!commission.id) throw new Error('Commission id does not exist.');
+      if (validate(commission.id)) throw new Error('Commission id is invalid.');
 
       const index = this.commissions.findIndex(c => c.id === commission.id);
 
       if (index === -1) throw new Error('Commission not found in commission store.');
 
       this.income -= this.commissions[index].price;
-      this.commissions[index] = {
-        ...commission
-      };
+      this.commissions[index] = commission;
       this.income += commission.price;
+
+      UpdateCommissionInLocalStorage(commission);
     },
     deleteCommissionById(commissionId: string) {
-      removeCommissionById(commissionId);
+      if (validate(commissionId)) throw new Error('Commission id is invalid.');
 
       const index = this.commissions.findIndex(c => c.id === commissionId);
 
       if (index === -1) throw new Error('Commission not found in commission store.');
 
       this.commissions.splice(index, 1);
+
+      removeCommissionById(commissionId);
     },
     recoverCommissions() {
       const { storedIncome, storedCommissions } = getAllCommissions();

@@ -15,7 +15,7 @@ const { closeModal } = trackerViewStore;
 
 const commissionStore = useCommissionStore();
 const {
-  storeCommission,
+  createCommission,
   updateCommission,
   deleteCommissionById,
   findCommissionById
@@ -33,7 +33,7 @@ let currentCommission = reactive<Commission>({
 
 function submitHandler() {
   if (currentModal.value === 'CREATE') {
-    storeCommission(currentCommission);
+    createCommission(currentCommission);
     closeModal();
   }
 
